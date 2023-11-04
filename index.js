@@ -1,23 +1,20 @@
 import { tweetsData } from "./data";
 
 const tweetInput = document.getElementById("tweet-input");
-const tweetBtn = document.getElementById("tweet-btn");
-
-tweetBtn.addEventListener("click", function () {
-  console.log(tweetInput.value);
-  tweetInput.value = "";
-});
 
 document.addEventListener("click", function (e) {
   const like = e.target.dataset.like;
   const retweet = e.target.dataset.retweet;
   const reply = e.target.dataset.reply;
+
   if (like) {
     handleLikeClick(like);
   } else if (retweet) {
     handleRetweetClick(retweet);
   } else if (reply) {
     handleReplyClick(reply);
+  } else if (e.target.id === "tweet-btn") {
+    handleTweetBtnClick();
   }
 });
 
@@ -53,6 +50,11 @@ function handleRetweetClick(tweetId) {
 
 function handleReplyClick(replyId) {
   document.getElementById(`replies-${replyId}`).classList.toggle("hidden");
+}
+
+function handleTweetBtnClick() {
+  console.log(tweetInput.value);
+  tweetInput.value = "";
 }
 
 function getFeedHtml() {
