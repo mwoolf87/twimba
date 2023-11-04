@@ -16,6 +16,8 @@ document.addEventListener("click", function (e) {
     handleLikeClick(like);
   } else if (retweet) {
     handleRetweetClick(retweet);
+  } else if (reply) {
+    handleReplyClick(reply);
   }
 });
 
@@ -49,6 +51,10 @@ function handleRetweetClick(tweetId) {
   render();
 }
 
+function handleReplyClick(replyId) {
+  document.getElementById(`replies-${replyId}`).classList.toggle("hidden");
+}
+
 function getFeedHtml() {
   let feedHTML = ``;
   tweetsData.forEach(function (tweet) {
@@ -61,6 +67,24 @@ function getFeedHtml() {
 
     if (tweet.isRetweeted) {
       retweetIconClass = "retweeted";
+    }
+
+    let repliesHtml = "";
+
+    if (tweet.replies.length) {
+      tweet.replies.forEach(function (reply) {
+        repliesHtml += `
+          <div class="tweet-reply">
+      <div class="tweet-inner">
+          <img src="${reply.profilePic}" class="profile-pic">
+              <div>
+                  <p class="handle">${reply.handle}</p>
+                  <p class="tweet-text">${reply.tweetText}</p>
+              </div>
+          </div>
+  </div>
+      `;
+      });
     }
 
     feedHTML += `
@@ -85,6 +109,9 @@ function getFeedHtml() {
                         </span>
                     </div>   
             </div>            
+    </div>
+    <div class="hidden" id="replies-${tweet.uuid}"> 
+        ${repliesHtml}
     </div>
 </div>
     `;
